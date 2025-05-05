@@ -13,7 +13,7 @@ public class KakaoOAuthService {
     private String clientId;
     @Value("${kakao.redirect-uri}")
     private String redirectUri;
-    @Value("${kakao.client-secret:}")
+    @Value("${kakao.client-secret}")
     private String clientSecret;
     @Value("${kakao.token-url}")
     private String tokenUrl;
@@ -23,6 +23,11 @@ public class KakaoOAuthService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public KakaoUserResponse getUserInfoByCode(String code) {
+        KakaoTokenResponse tokenResponse = requestAccessToken(code);
+        return getUserInfoByAccessToken(tokenResponse.getAccess_token());
+    }
+
+    public KakaoTokenResponse requestAccessToken(String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -35,9 +40,10 @@ public class KakaoOAuthService {
         }
         HttpEntity<MultiValueMap<String, String>> tokenRequest = new HttpEntity<>(params, headers);
         ResponseEntity<KakaoTokenResponse> tokenResponse = restTemplate.postForEntity(tokenUrl, tokenRequest, KakaoTokenResponse.class);
-        String accessToken = tokenResponse.getBody().getAccess_token();
+        return tokenResponse.getBody();
+    }
 
-        // 2. Use access token to get user info
+    public KakaoUserResponse getUserInfoByAccessToken(String accessToken) {
         HttpHeaders userHeaders = new HttpHeaders();
         userHeaders.setBearerAuth(accessToken);
         HttpEntity<?> userRequest = new HttpEntity<>(userHeaders);
