@@ -1,7 +1,8 @@
 HELP.md
 
-# Ignore all Spring Boot application properties files for all environments
+# Ignore all environment-specific application properties, but allow the example template
 src/main/resources/application*.properties
+!src/main/resources/application-example.properties
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
