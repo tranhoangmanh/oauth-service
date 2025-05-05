@@ -2,6 +2,9 @@
 
 A Spring Boot backend service for OAuth 2.0 authentication supporting Kakao (easily extensible for Naver, Google, etc).
 
+## Official Kakao Developer Documentation
+For more details on the Kakao OAuth 2.0 REST API, see the [Official Kakao Developer Document](https://developers.kakao.com/docs/latest/en/kakaologin/rest-api#request-code).
+
 ## Features
 - OAuth 2.0 login flow with Kakao
 - Exchanges authorization code for access token
